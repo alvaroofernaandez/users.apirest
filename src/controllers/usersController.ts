@@ -1,7 +1,7 @@
 import { UserRepository } from "@repositories/userRepository";
 import { UserService } from "@services/userService";
 import { IUserRepository, IUserService, User } from "types/UserTypes";
-import { Request, Response, RequestHandler } from "express";
+import { Request, Response } from "express";
 
 const userRepository: IUserRepository = new UserRepository();
 const userService: IUserService = new UserService(userRepository);

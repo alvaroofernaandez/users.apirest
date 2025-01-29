@@ -1,12 +1,18 @@
+import { loginUser, registerUser } from "@controllers/auth/authControllers";
 import { createRoles, deleteRoles, findRoles, findRolesById, updateRoles } from "@controllers/rolesController";
 import { findUsers, findUsersById, createUser, updateUser, deleteUser } from "@controllers/usersController";
 import { Router } from "express";
+import { Request, RequestHandler, Response } from "express";
 const router = Router();
 
 export default () => {
   router.get("/health", (req, res) => {
     res.send("La api está funcionando con éxito");
   });
+
+  // AUTH ROUTES
+  router.post("/auth/register", registerUser)
+  router.post("/auth/login", loginUser)
 
   // USERS ROUTES
   router.get("/users", findUsers);
