@@ -2,6 +2,7 @@ import { UserRepository } from "@repositories/userRepository";
 import { UserService } from "@services/userService";
 import { Request, Response } from "express";
 import { IUserRepository, IUserService, User } from "types/UserTypes";
+import jwt from 'jsonwebtoken';
 
 
 const userRepository: IUserRepository = new UserRepository();
@@ -25,7 +26,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
-    const {email, password}:User = req.body;
+    const {email, password}: User = req.body;
     const user = await userService.findUsersByEmail(email);
 
     if (!user) return res.status(400).json({message: 'Invalid user or password.'});
@@ -33,7 +34,9 @@ export const loginUser = async (req: Request, res: Response) => {
     const comparePass = await user.comparePassword(password);
     if (!comparePass) return res.status(400).json({message: 'Invalid user or password.'});
 
-    res.json(user);
+    const token = jwt.sign({id: user._id, email: user.email, username: user.username}, "ClaveSecreta", {expiresIn: "1h"});
+
+    res.json(token);
   } catch (error) {
     console.log('error :>>', error);
     res.status(500).json(error);
